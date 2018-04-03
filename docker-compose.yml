@@ -1,0 +1,32 @@
+version: '3'
+services:
+    redis-master:
+        image: redis:4.0.9-alpine
+        # This overrides default start command and adds settings for no persistance 
+        command: redis-server --save 0 --appendonly no
+    redis-slave-one:
+        image: redis:4.0.9-alpine
+        depends_on:
+          - redis-master
+        # This overrides default start command, sets this instance as a slave and adds settings for no persistance
+        command: redis-server --slaveof redis-master 6379 --save 0 --appendonly no
+    redis-slave-two:
+        image: redis:4.0.9-alpine
+        depends_on:
+          - redis-master
+        # This overrides default start command, sets this instance as a slave and adds settings for no persistance
+        command: redis-server --slaveof redis-master 6379 --save 0 --appendonly no
+    # Sentinals
+    sentinel-one:
+        build: .
+        environment:
+          - REDIS_MASTER=redis-master
+        depends_on:
+          - redis-master
+    sentinel-two:
+        build: .
+        environment:
+          - REDIS_MASTER=redis-master
+        depends_on:
+          - redis-master
+
