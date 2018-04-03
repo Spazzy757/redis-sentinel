@@ -21,5 +21,18 @@ de220d008b95        redis:4.0.9-alpine           "docker-entrypoint..."   14 min
 - slaves: slaves of the master
 - sentinel: the two instances of sentinel running
 
+
+Environment:
+```
+SENTINEL_QUORUM 1
+
+SENTINEL_DOWN_AFTER 1000
+
+SENTINEL_FAILOVER 1000
+
+REDIS_MASTER redis-master
+```
+> These are defaults that can be changed by setting the coreesponding environment variables
+
 # Test Fail Over
 if you kill the master container you should be able to see one of the slaves get selected as the master instance by sentinel
